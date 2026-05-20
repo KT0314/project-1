@@ -33,11 +33,16 @@ unit_price = np.array(unit_price)
 # (1) 每個商品總庫存價值
 total_inventory_value = stock_quantity * unit_price
 
-# (2) 找出最暢銷商品
-best_index = np.argmax(sales_volume)
-best_product = products[best_index]
+# (2) 找出最暢銷商品（可能不只一個）
+max_sales = np.max(sales_volume)
 
-print("最暢銷商品：", best_product)
+# 找出所有最大銷售量的位置
+best_indices = np.where(sales_volume == max_sales)[0]
+
+# 找出所有最暢銷商品名稱
+best_products = products[best_indices]
+
+print("最暢銷商品：", best_products)
 
 # (3) 9折後收入
 revenue_90_discount = sales_volume * unit_price * 0.9
@@ -66,7 +71,7 @@ with open("hw_ok.csv", "w", newline="", encoding="utf-8") as f:
             sales_volume[i],
             total_inventory_value[i],
             revenue_90_discount[i],
-            i == best_index
+            i in best_indices
         ])
 
 print("已成功輸出 hw_ok.csv")
